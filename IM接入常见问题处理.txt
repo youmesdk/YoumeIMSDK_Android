@@ -1,0 +1,80 @@
+ 游密 IM SDK 接入常见问题处理说明：
+ 注：游密技术QQ群：329145286 ，为协助客户快速完成SDK接入，接入过程中如遇问题可以随时在QQ群或者电话联系我们游密的同学。比如编译环境配置的问题，我们可以直接远程协助处理。
+
+ 为正确理解本文的含义，阅读本文档需配合SDK的使用说明文档。
+
+ 1. Windows 开发环境配置
+ Cocos2d引入游密提供的dll、lib库和.h、.cpp源文件；Unity导入插件后即支持在Windows Editor环境使用。
+
+ 2. 真机编译环境配置
+ 一般参考SDK包内的文档说明即可完成配置。Cocos2d-x根据项目的自定义程度，配置上可能需要根据实际情况变通，关键是要正确配置库文件和头文件的引入。
+
+ 3. Appkey和SecretKey如果获取
+ 打开 http://www.youme.im ，注册帐号，注册后即可在控制台自行添加应用，添加了应用以后就可以获取到对应的appkey和secretkey。
+
+ 4. 实现语音消息发送的流程简介
+ init -> login -> onLogin -> joinRoom -> SendAudioMessage -> StopAudioMessage -> OnSendAudioMessageStatus
+
+ 5. 实现语音消息接收的流程简介
+ init -> login -> onLogin -> joinRoom -> OnRecvMessage -> Download -> OnDownload
+
+ 6. 语音消息播放
+ 截至2.0.3.3307，我们的SDK还没有提供播放接口，开发者需要使用游戏引擎自身的播放接口进行播放。
+
+ 7. 发送消息收到 UnknowError 错误
+ 常见于发送房间消息，房间号并不存在。修正的方法是往自己joinRoom的房间id发消息，就可以发送成功。
+
+ 8. 发送录音失败
+ 常见的原因有一下几个：登陆没有成功、没有麦克风（windows比较常见）、没有调用StopAudioMessage、录音时间太短（建议录音限制 1s 以上）。另外可以发送日志给我们定位具体问题。
+
+ 9. 如何保持SDK的登陆状态和游戏保持同步 
+ SDK内部包含断线重试 ，但是不会一直重试，默认配置会重试5分钟左右，如果依旧连接不上，会通过OnLogout通知。要保持游戏和IM的登陆同步，需要再以下几个地方添加上重试登陆的逻辑：
+  - 判断OnLogin返回的结果，如果不是Success（int值为0），就可以尝试再次调用登陆；
+  - 在OnLogout的通知里，判断游戏是否在线，如果游戏是在线状态，就尝试再次调用登陆->进频道。注意如果是主动调用的logout接口，就不要重试。
+
+ 10. 缓存清理
+ 截至2.0.3.3307版本，还需要开发者自行清理。可以配合使用SetAudioCacheDir (for Cocos2d-x)或者SetAudioCachePath (for Unity)，指定缓存到同一个目录，然后启动游戏的时候清理下该目录。
+
+ 11. 我完全不需要语音转文字功能，能否精简sdk
+ 我们有同步编译的不带语音转文字功能的sdk，可以联系我们获取。
+
+ 12. 初始化和反初始化
+ 目前SDK的初始化和反初始化设计都是只能调用一次。多次调用初始化(init)是安全的，但是反初始化只能在测底退出游戏的时候调用。切换帐号只需Logout再login即可。
+
+ 13. Cocos2d-x cpp/js/lua 项目为何要求添加Android Java的初始化语句
+ 针对Cocos2d项目，必须在项目第一个启动的AppActivity添加如下改动，并且必须保证游密的初始化代码优先于加载游戏so的代码执行，该要求是受限于部分Android（常见于4.x系统）系统对so加载顺序的处理，必须要先加载被依赖的so。
+ 示例：
+@Override
+protected void onCreate(Bundle bundle)
+{
+    //下面的两个调用顺序不能错
+    com.youme.im.IMEngine.init(this);     
+    super.onCreate(bundle);
+}
+
+ 14. 录音反回PTT_Fail
+ 一般有以下几种情况会返回PTT_Fail：
+  - 没有麦克风
+  - 上一次SendAudioMessage后还没有StopAudioMessage就又调用了StopAudioMessage
+  - 使用带语音识别的接口，但是并没有说话
+  - StopAudioMessag后立即调用了SendAudioMessage，由于我们的接口是全异步设计，每次录音之间最好有1s左右的间隔，这样才能正常重开讯飞语音识别引擎。
+
+ 15. 日志文件位置
+ windows: c:\Users\用户名\AppData\Local
+ android: sd卡/Android/data/包名/cache 或者 sd卡/Android/data/包名/yimcache
+ iOS: 请下载应用沙盒目录，参考：http://www.jianshu.com/p/a11437e68083
+
+ 16. 语音播放听不清
+ 建义在播放语音时暂停或者调低游戏背景音乐音量。常见的听不清是因为播放语音时，游戏背景音乐没有停止，游戏音乐一般经过专门调制，音量很高，会掩盖语音，导致语音听不清楚。
+ 游密2.0.3.3xxx 版本的 IM SDK的语音音量是经过AGC处理，音量水平对标微信语音音量。受限于录音设备精度，音量水平如果再提高会引起明显的失真。
+
+ 17. Cocos2d 特别注意事项
+ 由于 Cococs2d 引擎构建工具在链接期会在生成的so文件里记录各个动态库的依赖关系，必须先加载被依赖的so库，否则部分Android系统会出现无法加载动态库的情况，所以这个
+ 在Java中的AppActivity里的添加顺序一定要把游密的初始化放到最开始：
+@Override
+protected void onCreate(Bundle bundle)
+{
+   //下面的两个调用顺序不能错
+    com.youme.im.IMEngine.init(this);     
+    super.onCreate(bundle);
+}

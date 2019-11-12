@@ -1,0 +1,171 @@
+YoumeIM SDK Release Note:
+
+2.3.1.11089 (2019/10/28) ChangeLog:
+1. Cocos2d Lua registerScriptHandler可以无需注册满30个回调事件，按需注册即可，但是需要保持注册顺序
+2. iOS wrapper：支持isread属性
+3. iOS wrapper：sendFile fileType参数修正
+4. iOS：阿里识别库升级，增强稳定性
+5. macOS：支持在登录成功前获取sdk默认存储路径
+6. OndownoadByUrl  支持返回语音时长 
+7. Android：运行时不再跳过已经申请过的授权检查提示
+
+2.3.1.11070 (2019/07/22) ChangeLog:
+API变更：
+1. DealAddFriend(string userID, int dealResult, ulong reqID)  // reqID是新添加参数，多个请求，每个请求有不同的req值
+2. OnBeRequestAddFriendNotify(userID,comments,reqID); //该回调添加了reqID，用于在收到同一个用户多次请求添加好友时，可以区分需要处理那个请求
+
+im_android_2.3.0.11039:
+    1. 文本消息本地历史记录回调添加附加Param字段;
+    2. 从服务器拉取的文本消息历史中, 添加 AttachParam 字段。
+
+2.3.0.11036 (2018/08/20) ChangeLog:
+	1. 更新USCModule.framework , 解决 2018-12-31 后iOS平台文本识别不可用的问题；
+    2. 更新阿里云文本识别动态库, 仅支持iOS真机, 便于直接构建提审包, 需要iOS模拟器支持的版本可以联系游密技术支持;
+    3. 发送文本消息,长度限制改为2k字节。
+
+2.2.0.9021 (2018/08/20) ChangeLog:
+	1. 避免没有READ_PHONE_STATE权限是无法使用语音识别；
+    2. 解决云知声语音识别没有音量回调的问题;
+    3. Break Change: Unity Init 接口的区域参数改为必选参数；
+    4. Break Change: 移除 Unity 的 SetServerZone 接口。
+
+2.2.0.8016 (2018/08/20) ChangeLog:
+	语音识别优化
+
+2.2.0.8002 (2018/06/21) ChangeLog:
+    1. add:关系链-用户信息管理功能
+           1）设置用户基本资料
+           2）查询用户基本资料    
+           3）设置用户头像
+           4）切换用户状态
+           5）设置好友添加权限
+    2. add:关系链-好友管理
+           1）查找好友
+           2）添加好友
+           3）处理被添加为好友请求
+           4）删除好友
+           5）拉黑好友
+           6）查询好友
+           7）查询好友请求列表
+    3. change: 查询最近联系人，回调增加与该联系人的未读消息数量
+               回调：OnGetRecentContacts
+    4. change: 发送文本消息，windows平台字符长度限制。
+    5. fix: 优化LBS功能,增加日志，方便定位少数安卓手机获取不到位置的问题
+    6. fix: 礼物消息json格式验证
+    7. fix: 修复了拿不到IMEI生成UUID
+
+
+2.1.4.7016 (2018/05/24) ChangeLog:
+    1. fix: 断网重连修复，（频繁前后台切换重连失败）
+    2. fix: 带文字识别录音，不说话场景语音发送失败
+    3. fix: PTT配置高采样，文字识别准确率很低
+    4. fix: PTT高采样配置，码率配置
+    5. fix: 语音上传增加重试次数
+
+2.1.4.7009 (2018/05/17) ChangeLog:
+    1. add：离开所有频道接口
+    2. add: 设置是否自动下载语音消息接口
+    3. add: 设置下载保存目录接口
+    4. add: PTT高采样配置，码率配置
+    5. add: 录音音量回调（iOS,Android,windows）
+    6. add: 获取与指定用户距离接口(LBS)，可实现海外应用“附近的人”功能。
+    7. add: 语音转文字支持转为繁体中文，满足港澳台用户语音转文字需求。
+    8. add: 删除指定用户的本地聊天历史记录，可设置白名单
+    9. change: PTT增益增加两种配置，1）关闭增益 2）增益+最大音量拉伸
+    10. change: 游戏暂停接口增加一个参数，OnPause(bool pauseReceiveMessage)
+    11. change: 优化频道消息记录拉取方式，支持配置拉取条数和拉取方向,拉取频道最近聊天记录接口的回调由 OnRecvMessage 更改为 OnQueryRoomHistoryMessageFromServer
+    
+
+2.1.3.6131 (2017/12/07) ChangeLog:
+    1. add：断网重连，开始重连回调 OnStartReconnect
+    2. add: 断网重连，重连结果回调 OnRecvReconnectResult(ReconnectResult result)
+
+
+2.1.3.6130 (2017/12/01) ChangeLog:
+    1. add：只录音接口增加录音完成的回调。
+    2. add: lua版本增加 只识别语音文本的回调。
+
+2.1.3.6129 (2017/11/30) ChangeLog:
+    1. change：发送消息回调增加发送时间戳，OnSendMessageStatus。
+    2. change：发送语音消息回调增加发送时间戳，OnSendAudioMessageStatus。
+    3. change：仅获取语音识别文本回调增加序列号，OnGetRecognizeSpeechText。
+    4. add: lua版本增加 发送文件接口。
+
+2.1.3.6126 (2017/11/24) ChangeLog:
+    1. add：公告撤销通知。
+
+2.1.3.6125 (2017/11/21) ChangeLog:
+    1. change：置顶公告-删除本地缓存。
+    
+2.1.3.6123 (2017/11/17) ChangeLog:
+    1. fix：H5语音互通。
+    
+2.1.3.6122 (2017/11/16) ChangeLog:
+    1. change：修改识别语音设置接口，可从历史记录读取下载语音消息。
+    2. change：置顶一次公告，在显示时段每次登陆都显示公告。
+
+2.1.3.6121 (2017/11/09) ChangeLog:
+    1. add：SDK和H5微信语音互通。
+
+2.1.3.6120 (2017/11/01) ChangeLog:
+    1. fix：网络断开调用登出崩溃，网络断开调用登出再重新登录失败，断网后重连超时。
+
+2.1.3.6113 (2017/10/26) ChangeLog:
+    1.Add: 带语音识别，增加设置只识别语音文字，不发送语音消息的接口：SetOnlyRecognizeSpeechText
+           语音的识别文字的回调：OnGetRecognizeSpeechText
+    
+
+2.1.3.x ChangeLog:
+    1.Change: 获取最近联系人消息回调接口中的“联系人列表”参数的类型改变， 联系人列表参数由原来的只有联系人ID，增加消息时间、消息内容、消息类型。
+    2.Add: 屏蔽用户接口
+    3.Add: 解除所有已屏蔽用户接口
+    4.Add: 获取已屏蔽用户列表接口
+    5.Add: 获取频道人数接口
+   
+
+2.1.2.x ChangeLog:
+    1.Add:增加了一个查询禁言状态的接口；
+    2.Change: 发送语音、文本的状态回调消息里，增加了3个参数，如果被禁言将告知具体原因和封禁时间；
+    3.Change：libycommon.a更名为libYouMeCommon.a 。
+
+2.1.1.5036 (2017/06/23) ChangeLog：
+    1. add：公告获取接口；
+    2. add：设置讯飞方言设置接口；
+    3. add：举报接口；
+    4. add：进出频道的通知接口。
+
+2.1.0.4191 (2017/05/11) ChangeLog：
+    1. add：添加语言文本翻译
+	2. add：LBS获取当前地理位置及获取附近的人
+
+2.0.4.4115 (2017/03/15) ChangeLog：
+    1. add：添加跨平台语音播放接口
+    2. add：添加可选频道离线历史记录
+    3. add：添加清理缓存目录接口
+    4. add：添加录音结束，开始发送的通知:OnStartSendAudioMessage
+    5. add：用户在线状态查询接口
+    6. add：策略词分级配置，可用于广告识别和过滤
+    7. add：添加用户扩展信息存取接口
+
+2.0.3.3325 (2017/02/28) ChangeLog：
+    1. fix：IPv6网络下的兼容性修复
+
+2.0.3.3309 (2017/02/20) ChangeLog：
+    1. Change：提高录音音量
+    2. Change：对语音清晰度进行优化
+    3. Change: 降低 iOS 语音识别录音启动时间
+
+2.0.3.3146 (2017/01/23) 相对 2.0.2.x的变化：
+    1. Add: 添加发送礼物消息接口
+    2. Add: 添加录音返回下载链接接口
+    3. Add: 拉取频道在10小时内最多N条历史记录
+    4. Add: 手动收取消息接口，可以选择平时只接收有新消息的通知，必要时再拉取消息体
+    5. Add: 群发文本消息接口
+    6. Add: AMR文件格式转WAV格式接口
+    7. Add: 本地私聊历史记录查询、清理接口
+    8. Add: 游戏暂停可以通知sdk，sdk利用该通知实现更好的重连效果
+    9. Add：添加Android x86/armeabi-v7a库
+    10. Change：登陆接口添加可选token参数支持，提供高的安全性选择
+    11. Change：Unity SDK改为从主线程回调，目前仅剩C++回调接口还是在子线程调用
+    12. Change：不在强制要求退出应用时调用反初始化
+
