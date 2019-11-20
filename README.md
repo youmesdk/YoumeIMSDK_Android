@@ -827,7 +827,8 @@ public interface MessageEventCallback {
   `getReceiveID()`： 返回消息接收者ID，String型
   `getChatType()`：返回聊天类型，私聊/频道聊天，int型
   `getMessageID()`： 返回消息ID，long型
-  `getMessageType()`： 返回消息类型，0-未知类型，1-文本消息，2-自定义消息，3-表情，4-图片，5-语音，6-视频，7-文件，8-礼物  `getCreateTime()`： 消息收发时间  
+  `getMessageType()`： 返回消息类型，0-未知类型，1-文本消息，2-自定义消息，3-表情，4-图片，5-语音，6-视频，7-文件，8-礼物
+  `getCreateTime()`： 消息收发时间  
   `getIsRead()`：返回消息是否已读，boolean型
   `getDistance()`：若是附近频道的消息，返回该消息用户与自己的地理位置距离 
   `getMessageBody()`：返回消息体，IYIMMessageBodyBase型
@@ -1132,7 +1133,11 @@ setDownloadAudioMessageSwitch()在初始化之后，启动语音之前调用;若
 - 原型：
 
 ``` java
-/** * 设置语音识别语言 * @param language：语言 */public int setSpeechRecognizeLanguage(int language)
+/**
+ * 设置语音识别语言
+ * @param language：语言
+ */
+public int setSpeechRecognizeLanguage(int language)
 ```
 
 - 参数：
@@ -2123,12 +2128,23 @@ public interface ResultCallback<ArrayList<YIMForbiddenSpeakInfo>> {
 ## 公告管理
 基本流程：申请开通公告功能->后台添加新公告然后设置公告发送时间,公告消息类型,发送时间,接收公告的频道等。->(客户端流程) 设置对应监听-> 调用对应接口->回调接收
 ### 公告功能简述
-1.公告发送由后台配置，如类型、周期、发送时间、内容、链接、目标频道、次数、起始结束时间等。
-2.公告三种类型：跑马灯，聊天框，置顶公告，(1) 跑马灯，聊天框公告可设置发送时间，次数和间隔（从指定时间点开始隔固定间隔时间发送多次，界面展示及显示时长由客户端决定）；(2) 置顶公告需设置开始和结束时间（该段时间内展示）。
-3.三种公告均有一次性、周期性两种循环属性：  一次性公告，到达指定时间点，发送该条公告;  周期性公告，跟一次性公告发送规则一致，但是可以设置发送周期（在每周哪几天的指定时间发送）。
-  4.跑马灯与聊天框公告只有发送时间点在线的用户才能收到该公告，显示规则由客户端自己决定，两者区别主要是界面显示的区分。
-5.置顶公告有显示起始和结束时间，表示该时段内显示，公告发送时间点在线的用户会收到该公告，公告发送时间点未在线用户，在公告显示时段登录，登录后可通过查询公告接口查到该公告。
-6.公告撤销仅针对置顶公告，公告显示时段撤销公告，客户端会收到公告撤销通知，界面进行更新。
+
+1.公告发送由后台配置，如类型、周期、发送时间、内容、链接、目标频道、次数、起始结束时间等。
+
+2.公告三种类型：跑马灯，聊天框，置顶公告，
+(1) 跑马灯，聊天框公告可设置发送时间，次数和间隔（从指定时间点开始隔固定间隔时间发送多次，界面展示及显示时长由客户端决定）；
+(2) 置顶公告需设置开始和结束时间（该段时间内展示）。
+
+3.三种公告均有一次性、周期性两种循环属性：
+  一次性公告，到达指定时间点，发送该条公告;
+  周期性公告，跟一次性公告发送规则一致，但是可以设置发送周期（在每周哪几天的指定时间发送）。
+  
+4.跑马灯与聊天框公告只有发送时间点在线的用户才能收到该公告，显示规则由客户端自己决定，两者区别主要是界面显示的区分。
+
+5.置顶公告有显示起始和结束时间，表示该时段内显示，公告发送时间点在线的用户会收到该公告，公告发送时间点未在线用户，在公告显示时段登录，登录后可通过查询公告接口查到该公告。
+
+6.公告撤销
+仅针对置顶公告，公告显示时段撤销公告，客户端会收到公告撤销通知，界面进行更新。
 
 ### 接收公告 
 管理员在后台发布公告，当到达指定时间会收到该公告，界面根据不同类型的公告进行展示。
@@ -2300,7 +2316,8 @@ public interface ResultCallback<RelativeLocationInfo>
      /**
       * @param userID 用户ID
       * @param callback  获取距离回调
-      */      public void getDistance(String userID, YIMEventCallback.ResultCallback<UserDistanceInfo> callback)
+      */
+      public void getDistance(String userID, YIMEventCallback.ResultCallback<UserDistanceInfo> callback)
   ```
   
 - 回调参数：
@@ -2988,4 +3005,5 @@ YIMService.ServerZone{
     }
 ```
 
-
+### 备注：
+实际Demo点击此处下载->[Youme IM Demo for Android](http://dl2.youme.im/release/YIM_Android2_2.x.zip)
