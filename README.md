@@ -1,5 +1,7 @@
 # IM SDK for Android 使用指南
 
+## IM SDK 常见问题->[IM FAQ详解](https://github.com/youmesdk/wiki/blob/master/IMFAQ.md)
+
 ## IMSDK简介
 ### 1.功能目标
 
